@@ -24,7 +24,7 @@ def register():
             role=form.role.data
         )
         db.session.add(user)
-        db.session.commit()
+        db.session.flush() #
         if user.role == 'doctor':
             spec_id = form.specialization.data
             doc_name = form.name.data
@@ -34,7 +34,7 @@ def register():
                 specialization_id=spec_id
             )
             db.session.add(doctor)
-            db.session.commit()
+            # db.session.commit()
         elif user.role == 'patient':
             name = form.name.data
             patient = Patient(
@@ -42,7 +42,7 @@ def register():
                 user_id=user.id
             )
             db.session.add(patient)
-            db.session.commit()
+        db.session.commit()
         flash('Account created!', 'success')
         return redirect(url_for('main.login'))
     return render_template('register.html', form=form)
