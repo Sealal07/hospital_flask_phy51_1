@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Запись на прием{% endblock %}
+{% block content %}
+<h2>Записаться на прием: </h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.specialization.label }}<br>
+        {{ form.specialization() }}
+    </p>
+    <p>
+        {{ form.doctor_id.label }}<br>
+        {{ form.doctor_id() }}
+    </p>
+    <p>
+        {{ form.procedure.label }}<br>
+        {{ form.procedure() }}
+    </p>
+    <p>
+        {{ form.date.label }}<br>
+        {{ form.date(class='form-control', id='time_picker') }}
+    </p>
+    <p>{{ form.submit()}}</p>
+
+</form>>
+{% endblock %}

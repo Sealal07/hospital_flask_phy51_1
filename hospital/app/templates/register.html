@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+    <h2>Регистрация</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username }}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email }}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password }}
+        </p>
+        <p>
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password }}
+        </p>
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.role.label }}<br>
+            {{ form.role(id='role_select') }}
+        </p>
+        <p id="doctor_fields">
+            {{ form.specialization.label }}<br>
+            {{ form.specialization }}
+        </p>
+        <p>{{ form.submit }}</p>
+    </form>
+{% endblock %}

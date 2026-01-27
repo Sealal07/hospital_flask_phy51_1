@@ -1,0 +1,9 @@
+pip freeze > requirements.txt    -- добавляет библиотеки из виртуального окружения
+pip install -r requirements.txt  -- установка всех библиотек из файла
+flask run     --запускает сервер ()
+
+
+$env:FLASK_APP="run.py"   -- добавляет точку входа в переменную окружения
+flask db init  --инициализация миграций
+flask db migrate -m 'initial database'  --создание скрипта миграций
+flask db upgrade    --сохранить изменения
