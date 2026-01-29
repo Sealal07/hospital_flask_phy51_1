@@ -81,50 +81,52 @@ def dashboard():
         return render_template('patient_dashboard.html',
                                appointments=appointments, patient=patient)
     else:
-        return render_template('admin.html') #сделать админку
+        return render_template('admin.html')
+
+@main.route('/get_doctors/<int:specialization_id>')
+def get_doctors(specialization_id):
+    doctors = Doctor.query.filter_by(specialization_id=specialization_id).all()
+    return jsonify([{'id': d.id, 'name': d.name} for d in doctors])
+
+@main.route('/get_procedures/<int:specialization_id>')
+def get_procedures(specialization_id):
+    procedures = Procedure.query.filter_by(specialization_id=specialization_id).all()
+    return jsonify([{'id': p.id, 'name': p.name} for p in procedures])
+
+@main.route('/get_booked_slots/<int:doctor_id>/<string:date>')
+def get_booked_slots(doctor_id, date):
+    booked = Appointment.get_time_slots(doctor_id, date)
+    return jsonify(booked)
+
 
 @main.route('/appointment', methods=['GET', 'POST'])
 @login_required
 def appointment():
-    if current_user.role != 'patient':
-        flash("can't book", 'warning')
-        return redirect(url_for('main.dashboard'))
-
     form = AppointmentForm()
     form.specialization.choices = [(s.id, s.name) for s in Specialization.query.all()]
-    if form.specialization.data:
-        specialization_id = form.specialization.data
-        form.doctor.choices = [(d.id, d.name) for d in Doctor.query.filter_by(
-            specialization_id=specialization_id
-        ).all()]
-        form.procedure.choices = [(p.id, p.name) for p in Procedure.query.filter_by(
-            specialization_id=specialization_id
-        ).all()]
-    else:
-        form.doctor.choices = []
-        form.procedure.choices = []
-
-    time_slots = [(f'{hour:02d}:{minute:02d}', f'{hour:02d}:{minute:02d}')
-                  for hour in range(9, 20) for minute in range(0, 60, 20)]
-    form.time_slots = time_slots
 
     if form.validate_on_submit():
-        selected_date = form.date.data.strftime('%Y-%m-%d')
-        selected_time = form.time_slot.data
-        appointment_time = datetime.strptime(f'{selected_date} {selected_time}')
+        patient = Patient.query.filter_by(user_id=current_user.id).first()
+        try:
+            full_time_str = f"{form.date.data} {form.time_slot.data}"
+            appointment_time = datetime.strptime(full_time_str, '%Y-%m-%d %H:%M')
 
-        booked_store = Appointment.get_time_slots(form.doctor.data, selected_date)
-        if selected_time in booked_store:
-            flash('already booked', 'danger')
-            return render_template('appointment.html', form=form, time_slots=time_slots)
+            new_app = Appointment(
+                patient_id=patient.id,
+                doctor_id=form.doctor_id.data,
+                procedure_id=form.procedure.data,
+                appointment_time=appointment_time,
+                status='scheduled'
+            )
+            db.session.add(new_app)
+            db.session.commit()
+            flash('Вы успешно записаны!', 'success')
+            return redirect(url_for('main.dashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Ошибка при сохранении: {e}', 'danger')
 
-        appointment = Appointment(patient_id=current_user.id,
-                                  doctor_id=form.doctor_id.data,
-                                  procedure_id=form.procedure.data,
-                                  appointment_time=appointment_time)
-        db.session.add(appointment)
-        db.session.commit()
-        flash('Appointment added', 'success')
-        return redirect(url_for('main.dashboard'))
-    return render_template('appointment.html', form=form, time_slots=time_slots)
+    if form.errors:
+        print(f"Ошибки формы: {form.errors}")
 
+    return render_template('appointment.html', form=form)

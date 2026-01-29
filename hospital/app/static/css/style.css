@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+.time-slot {
+    padding: 10px; border: 1px solid #ccc; text-align: center; cursor: pointer; border-radius: 5px;
+}
+.time-slot.booked { background-color: #ebedef; color: #a1a1a1; cursor: not-allowed; pointer-events: none; }
+.time-slot.selected { background-color: #28a745; color: white; border-color: #28a745; }
+.time-slot:hover:not(.booked) { background-color: #e9ecef; }

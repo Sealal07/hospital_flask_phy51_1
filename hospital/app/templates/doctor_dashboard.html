@@ -7,8 +7,8 @@
     <ul>
         {% for a in appointments %}
             <li>
-                Пациент: {{ a.patient_id.name }}<br>
-                Процедура: {{ a.procedure_id.name }}<br>
+                Пациент: {{ a.patient.name }}<br>
+                Процедура: {{ a.procedure.name }}<br>
                 Дата и время: {{ a.appointment_time.strftime('%Y-%m-%d %H:%M') }}
             </li>
         {% endfor %}

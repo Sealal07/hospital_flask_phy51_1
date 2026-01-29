@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Запись на прием{% endblock %}
 {% block content %}
-<h2>Записаться на прием: </h2>
-<form method="POST">
+{% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger">{{ field }}: {{ errors|join(', ') }}</div>
+{% endfor %}
+<h2>Записаться на прием</h2>
+<form method="POST" id="appointment-form">
     {{ form.hidden_tag() }}
-    <p>
-        {{ form.specialization.label }}<br>
-        {{ form.specialization() }}
-    </p>
-    <p>
-        {{ form.doctor_id.label }}<br>
-        {{ form.doctor_id() }}
-    </p>
-    <p>
-        {{ form.procedure.label }}<br>
-        {{ form.procedure() }}
-    </p>
+    <p>{{ form.specialization.label }}<br>{{ form.specialization(id='spec_select') }}</p>
+    <p>{{ form.doctor_id.label }}<br>{{ form.doctor_id(id='doc_select') }}</p>
+    <p>{{ form.procedure.label }}<br>{{ form.procedure(id='proc_select') }}</p>
+
     <p>
         {{ form.date.label }}<br>
-        {{ form.date(class='form-control', id='time_picker') }}
+        {{ form.date(class='form-control', id='date_picker', type='date') }}
     </p>
-    <p>{{ form.submit()}}</p>
 
-</form>>
+    <div id="time-section" style="display:none;">
+        <label>Выберите доступное время:</label>
+        <div id="time-grid" class="time-grid">
+            </div>
+        {{ form.time_slot(id='selected_time_input', type='hidden') }}
+    </div>
+
+    <p>{{ form.submit() }}</p>
+</form>
+
 {% endblock %}

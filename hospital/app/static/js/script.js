@@ -12,4 +12,36 @@ document.addEventListener('DOMContentLoaded', function(){
         roleSelect.addEventListener('change', toggleDoctorFields);
         toggleDoctorFields();
     }
+
+
+const specSelect = document.getElementById('spec_select');
+const docSelect = document.getElementById('doc_select');
+const procSelect = document.getElementById('proc_select');
+
+specSelect.onchange = function() {
+    const specId = specSelect.value;
+
+    fetch('/get_doctors/' + specId).then(response => response.json()).then(data => {
+        let optionHTML = '<option value="">Выберите врача</option>';
+        data.forEach(d => {
+            optionHTML += `<option value="${d.id}">${d.name}</option>`;
+        });
+        docSelect.innerHTML = optionHTML;
+        procSelect.innerHTML = '<option value="">Сначала выберите врача</option>';
+    });
+};
+
+docSelect.onchange = function() {
+    const specId = specSelect.value;
+    if (this.value) {
+        fetch('/get_procedures/' + specId).then(response => response.json()).then(data => {
+            let optionHTML = '';
+            data.forEach(p => {
+                optionHTML += `<option value="${p.id}">${p.name}</option>`;
+            });
+            procSelect.innerHTML = optionHTML;
+        });
+    }
+};
+
 });
