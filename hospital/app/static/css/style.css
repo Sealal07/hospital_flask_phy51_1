@@ -1,7 +1,36 @@
-.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+
 .time-slot {
-    padding: 10px; border: 1px solid #ccc; text-align: center; cursor: pointer; border-radius: 5px;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb; /* gray-200 */
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+    background-color: white;
+    font-weight: 500;
 }
-.time-slot.booked { background-color: #ebedef; color: #a1a1a1; cursor: not-allowed; pointer-events: none; }
-.time-slot.selected { background-color: #28a745; color: white; border-color: #28a745; }
-.time-slot:hover:not(.booked) { background-color: #e9ecef; }
+
+
+.time-slot:hover:not(.booked) {
+    border-color: #818cf8; /* indigo-400 */
+    color: #4f46e5; /* indigo-600 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+
+.time-slot.booked {
+    background-color: #f3f4f6; /* gray-100 */
+    color: #d1d5db; /* gray-300 */
+    cursor: not-allowed;
+    pointer-events: none;
+    border-color: #f3f4f6;
+}
+
+
+.time-slot.selected {
+    background-color: #4f46e5 !important; /* indigo-600 */
+    color: white !important;
+    border-color: #4f46e5 !important;
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+    transform: scale(1.05);
+}

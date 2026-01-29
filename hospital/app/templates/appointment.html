@@ -1,28 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for field, errors in form.errors.items() %}
-    <div class="alert alert-danger">{{ field }}: {{ errors|join(', ') }}</div>
-{% endfor %}
-<h2>Записаться на прием</h2>
-<form method="POST" id="appointment-form">
-    {{ form.hidden_tag() }}
-    <p>{{ form.specialization.label }}<br>{{ form.specialization(id='spec_select') }}</p>
-    <p>{{ form.doctor_id.label }}<br>{{ form.doctor_id(id='doc_select') }}</p>
-    <p>{{ form.procedure.label }}<br>{{ form.procedure(id='proc_select') }}</p>
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">Записаться на прием</h2>
 
-    <p>
-        {{ form.date.label }}<br>
-        {{ form.date(class='form-control', id='date_picker', type='date') }}
-    </p>
+    <form method="POST" id="appointment-form" class="space-y-6">
+        {{ form.hidden_tag() }}
 
-    <div id="time-section" style="display:none;">
-        <label>Выберите доступное время:</label>
-        <div id="time-grid" class="time-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700">{{ form.specialization.label }}</label>
+                {{ form.specialization(id='spec_select', class='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition') }}
             </div>
-        {{ form.time_slot(id='selected_time_input', type='hidden') }}
-    </div>
 
-    <p>{{ form.submit() }}</p>
-</form>
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700">{{ form.doctor_id.label }}</label>
+                {{ form.doctor_id(id='doc_select', class='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition') }}
+            </div>
+        </div>
 
+        <div class="space-y-2">
+            <label class="block text-sm font-semibold text-gray-700">{{ form.procedure.label }}</label>
+            {{ form.procedure(id='proc_select', class='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition') }}
+        </div>
+
+        <div class="space-y-2">
+            <label class="block text-sm font-semibold text-gray-700">{{ form.date.label }}</label>
+            {{ form.date(class='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition', id='date_picker', type='date') }}
+        </div>
+
+        <div id="time-section" style="display:none;" class="space-y-4 animate-fade-in">
+            <label class="block text-sm font-semibold text-gray-700">Выберите доступное время:</label>
+            <div id="time-grid" class="grid grid-cols-3 md:grid-cols-6 gap-3">
+                </div>
+            {{ form.time_slot(id='selected_time_input', type='hidden') }}
+        </div>
+
+        <div class="pt-4">
+            {{ form.submit(class='w-full md:w-auto px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transform hover:-translate-y-0.5 transition shadow-lg shadow-indigo-200') }}
+        </div>
+    </form>
 {% endblock %}

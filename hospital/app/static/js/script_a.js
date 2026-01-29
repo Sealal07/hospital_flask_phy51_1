@@ -30,6 +30,7 @@ function updateSlots() {
 
             allSlots.forEach(slot => {
                 const div = document.createElement('div');
+
                 div.className = 'time-slot';
                 div.textContent = slot;
 
@@ -37,7 +38,11 @@ function updateSlots() {
                     div.classList.add('booked');
                 } else {
                     div.onclick = function() {
-                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+
+                        document.querySelectorAll('.time-slot').forEach(s => {
+                            s.classList.remove('selected');
+                        });
+
                         div.classList.add('selected');
                         timeInput.value = slot;
                     };
